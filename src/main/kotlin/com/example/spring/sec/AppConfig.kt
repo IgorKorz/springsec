@@ -1,8 +1,5 @@
 package com.example.spring.sec
 
-import com.example.spring.sec.handler.MySavedRequestAwareAuthenticationSuccessHandler
-import com.example.spring.sec.handler.RestAuthenticationEntryPoint
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -12,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -30,35 +26,22 @@ class WebConfig : WebMvcConfigurer {
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfig @Autowired constructor(
-        private val restAuthenticationEntryPoint: RestAuthenticationEntryPoint,
-        private val successHandler: MySavedRequestAwareAuthenticationSuccessHandler
-) : WebSecurityConfigurerAdapter() {
-    private val failureHandler = SimpleUrlAuthenticationFailureHandler()
-
+class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     init {
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL)
     }
 
-//    override fun configure(http: HttpSecurity) {
-//        http.csrf().disable().run {
-//            exceptionHandling()
-//                    .authenticationEntryPoint(restAuthenticationEntryPoint)
-//            authorizeRequests()
-//                    .antMatchers("/", "/home").permitAll()
-//                    .anyRequest().authenticated()
-//            formLogin()
-//                    .successHandler(successHandler)
-//                    .failureHandler(failureHandler)
-//                    .permitAll()
-//            logout()
-//                    .deleteCookies("JSESSIONID")
-//                    .permitAll()
-//            requiresChannel()
-//                    .antMatchers("/login*")
-//                    .requiresSecure()
-//        }
-//    }
+    override fun configure(http: HttpSecurity) {
+        http.run {
+            authorizeRequests()
+                    .antMatchers("/", "/home").permitAll()
+                    .anyRequest().authenticated()
+            formLogin()
+                    .permitAll()
+            logout()
+                    .permitAll()
+        }
+    }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.inMemoryAuthentication().apply {
