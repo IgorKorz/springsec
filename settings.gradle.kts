@@ -1,1 +1,1 @@
-rootProject.name = "spring_sec"
+rootProject.name = "springsec"

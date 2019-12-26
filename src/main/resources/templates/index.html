@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot Thymeleaf + Spring Security</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+    <div class="starter-template">
+        <h1>SpringSec</h1>
+        <h2>1. <a th:href="@{/admin}">For Admin only</a></h2>
+        <h2>2. <a th:href="@{/user}">For User only</a></h2>
+        <h2>3. <a th:href="@{/about}">For all</a></h2>
+    </div>
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
