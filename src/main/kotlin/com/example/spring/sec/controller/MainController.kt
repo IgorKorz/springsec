@@ -1,24 +1,23 @@
 package com.example.spring.sec.controller
+import com.example.spring.sec.model.Foo
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
+@RequestMapping("/api")
+@Validated
 class MainController {
-    @GetMapping(value = ["/", "/index"])
-    fun index() = "/index"
+    @GetMapping("/test")
+    fun test() = Foo().apply {
+        head = "user"
+    }
 
-    @GetMapping("/admin")
-    fun admin() = "/admin"
-
-    @GetMapping("/user")
-    fun user() = "/user"
-
-    @GetMapping("/about")
-    fun about() = "/about"
-
-    @GetMapping("/login")
-    fun login() = "/login"
-
-    @GetMapping("/403")
-    fun error403() = "/error/403"
+    @GetMapping("/admin/test")
+    fun adminTest() = Foo().apply {
+        head = "admin"
+    }
 }
