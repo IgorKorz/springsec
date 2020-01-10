@@ -17,17 +17,20 @@ repositories {
 }
 
 dependencies {
-//	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	implementation("org.springframework.security.oauth:spring-security-oauth2:2.2.2.RELEASE")
+	implementation("org.springframework.security:spring-security-jwt:1.1.0.RELEASE")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-//	implementation("org.postgresql:postgresql:42.2.9")
+	implementation("org.postgresql:postgresql:42.2.9")
 
 //	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 //		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
