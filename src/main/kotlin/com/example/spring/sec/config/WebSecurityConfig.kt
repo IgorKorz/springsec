@@ -6,16 +6,9 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
-import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
-
-//    init {
-//        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL)
-//    }
-
     override fun configure(http: HttpSecurity) {
         http.run {
             authorizeRequests()
@@ -28,12 +21,11 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.inMemoryAuthentication().apply {
-            //            passwordEncoder(encoder())
             withUser("user")
-                    .password("user")
+                    .password("{noop}user")
                     .roles("USER")
             withUser("admin")
-                    .password("admin")
+                    .password("{noop}admin")
                     .roles("ADMIN")
         }
     }
@@ -43,6 +35,3 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         return super.authenticationManagerBean()
     }
 }
-
-@Bean
-fun encoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
