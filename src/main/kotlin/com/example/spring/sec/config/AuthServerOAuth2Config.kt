@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices
 import org.springframework.security.oauth2.provider.token.TokenStore
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
 
 @Configuration
 @EnableAuthorizationServer
@@ -23,7 +23,7 @@ class AuthServerOAuth2Config @Autowired constructor(
         private val authenticationManager: AuthenticationManager
 ) : AuthorizationServerConfigurerAdapter() {
     override fun configure(clients: ClientDetailsServiceConfigurer) {
-        clients.inMemory().apply {
+        clients.jdbc(dataSource()).apply {
             withClient("sampleClientId")
                     .authorizedGrantTypes("implicit")
                     .scopes("read")
@@ -59,4 +59,4 @@ fun tokenService() = RemoteTokenServices().apply {
 }
 
 @Bean
-fun tokenStore(): TokenStore = InMemoryTokenStore()
+fun tokenStore(): TokenStore = JdbcTokenStore(dataSource())
