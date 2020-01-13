@@ -12,7 +12,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.run {
             authorizeRequests()
-                    .antMatchers("/login").permitAll()
+                    .antMatchers("/login", "/api/reg").permitAll()
                     .antMatchers("/api/admin/test").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
             formLogin().permitAll()
@@ -20,14 +20,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.inMemoryAuthentication().apply {
-            withUser("user")
-                    .password("{noop}user")
-                    .roles("USER")
-            withUser("admin")
-                    .password("{noop}admin")
-                    .roles("ADMIN")
-        }
+        auth.jdbcAuthentication().dataSource(dataSource())
     }
 
     @Bean
