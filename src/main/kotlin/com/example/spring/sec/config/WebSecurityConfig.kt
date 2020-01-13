@@ -12,7 +12,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.run {
             authorizeRequests()
-                    .antMatchers("/login", "/api/reg").permitAll()
+                    .antMatchers("/login", "/api/user/reg", "/api/client/reg").permitAll()
                     .antMatchers("/api/admin/test").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
             formLogin().permitAll()
