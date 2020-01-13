@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer
@@ -23,17 +24,7 @@ class AuthServerOAuth2Config @Autowired constructor(
         private val authenticationManager: AuthenticationManager
 ) : AuthorizationServerConfigurerAdapter() {
     override fun configure(clients: ClientDetailsServiceConfigurer) {
-        clients.jdbc(dataSource()).apply {
-            withClient("sampleClientId")
-                    .authorizedGrantTypes("implicit")
-                    .scopes("read")
-                    .autoApprove(true)
-
-            withClient("clientIdPassword")
-                    .secret("{noop}secret")
-                    .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-                    .scopes("read")
-        }
+        clients.jdbc(dataSource())
     }
 
     override fun configure(security: AuthorizationServerSecurityConfigurer) {
@@ -60,3 +51,12 @@ fun tokenService() = RemoteTokenServices().apply {
 
 @Bean
 fun tokenStore(): TokenStore = JdbcTokenStore(dataSource())
+
+@Bean
+fun passwordEncoder(): PasswordEncoder = object : PasswordEncoder {
+    override fun encode(rawPassword: CharSequence?) = "{noop}$rawPassword"
+
+    override fun matches(rawPassword: CharSequence?, encodedPassword: String?) =
+            if (encodedPassword != null) rawPassword == encodedPassword.substring(6)
+            else rawPassword == null
+}
