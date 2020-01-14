@@ -47,6 +47,7 @@ class MainController constructor(
                 head = "registration success", body = "created new user ${userDetails.username}")
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/client/reg")
     fun clientRegistration(@RequestBody clientDetails: ClientDto) =
             try {
@@ -64,12 +65,12 @@ class MainController constructor(
                 )
             }
 
-
     @GetMapping("/test")
     fun test() = Foo().apply {
         head = "user"
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/test")
     fun adminTest() = Foo().apply {
         head = "admin"
